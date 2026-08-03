@@ -18,13 +18,14 @@ mod transpose;
 mod vector;
 mod vector_tests;
 mod vector_tools;
+mod cyclic;
 
 use std::println;
 
 use vector_tests::*;
 
 fn main() {
-    println!("basic operation tests:");
+    /* println!("basic operation tests:");
     test_ops();
     println!("\nlinear_combination tests:");
     test_lc();
@@ -51,5 +52,7 @@ fn main() {
     println!("\ninverse tests:");
     inverse_test();
 	println!("\nrank tests:");
-	rank_test();
+	rank_test(); */
+	println!("\ncyclic tests:");
+	cyclic_tests();
 }

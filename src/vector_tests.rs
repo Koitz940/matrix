@@ -1,6 +1,7 @@
 use crate::complex::{Comp, Complex};
 use crate::cosine::*;
 use crate::cross::cross_product;
+use crate::cyclic::Cyclic;
 use crate::lerp::lerp;
 use crate::linear_combination;
 use crate::matrix::Matrix;
@@ -470,29 +471,28 @@ pub fn inverse_test() {
 }
 
 pub fn rank_test() {
-	let u = Matrix::from_multiple(vec![
-	vec![1., 0., 0.],
-	vec![0., 1., 0.],
-	vec![0., 0., 1.],
-	]).unwrap();
-	println!("{}", u.rank());
-	// 3
-	let u = Matrix::from_multiple(vec![
-	vec![ 1., 2., 0., 0.],
-	vec![ 2., 4., 0., 0.],
-	vec![-1., 2., 1., 1.],
-	]).unwrap();
-	println!("{}", u.rank());
-	// 2
-	let u = Matrix::from_multiple(vec![
-	vec![ 8., 5., -2.],
-	vec![ 4., 7., 20.],
-	vec![ 7., 6., 1.],
-	vec![21., 18., 7.],
-	]).unwrap();
-	println!("{}", u.rank());
-	// 3
-	let u = Matrix::from_multiple(vec![
+    let u =
+        Matrix::from_multiple(vec![vec![1., 0., 0.], vec![0., 1., 0.], vec![0., 0., 1.]]).unwrap();
+    println!("{}", u.rank());
+    // 3
+    let u = Matrix::from_multiple(vec![
+        vec![1., 2., 0., 0.],
+        vec![2., 4., 0., 0.],
+        vec![-1., 2., 1., 1.],
+    ])
+    .unwrap();
+    println!("{}", u.rank());
+    // 2
+    let u = Matrix::from_multiple(vec![
+        vec![8., 5., -2.],
+        vec![4., 7., 20.],
+        vec![7., 6., 1.],
+        vec![21., 18., 7.],
+    ])
+    .unwrap();
+    println!("{}", u.rank());
+    // 3
+    let u = Matrix::from_multiple(vec![
         vec![
             Complex { re: 1., im: -1. },
             Complex {
@@ -509,5 +509,35 @@ pub fn rank_test() {
         ],
     ])
     .unwrap();
-	println!("{}", u.rank());
+    println!("{}", u.rank());
+}
+
+pub fn cyclic_tests() {
+    let m = Matrix::from_multiple(vec![
+        vec![
+            Cyclic::<11>::new(1),
+            Cyclic::<11>::new(9),
+            Cyclic::<11>::new(5),
+        ],
+        vec![
+            Cyclic::<11>::new(0),
+            Cyclic::<11>::new(9),
+            Cyclic::<11>::new(5),
+        ],
+        vec![
+            Cyclic::<11>::new_i64(-1),
+            Cyclic::<11>::new(0),
+            Cyclic::<11>::new(2),
+        ],
+    ])
+    .unwrap();
+    let n = m.inverse().unwrap();
+    println!("{}", m.row_echelon());
+	println!("{}", &m * &n);
+	println!("{}", &n * &m);
+	println!("{}", n.rank());
+	println!("{}", n.determinant());
+	println!("{}", m.determinant());
+	println!("{}", m);
+	println!("{}", n);
 }

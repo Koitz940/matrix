@@ -94,7 +94,7 @@ impl<K: Copy + Sub<Output = K>> Sub<&Matrix<K>> for Matrix<K> {
 impl<R: Copy + Num, K: Copy + Mul<R, Output = K>> Mul<R> for &Matrix<K> {
     type Output = Matrix<K>;
     fn mul(self, other: R) -> Matrix<K> {
-        let new = self.iter().map(|x| (*x * other)).collect();
+        let new = self.iter().map(|x| *x * other).collect();
 
         Matrix::from_buff(new, self.width(), self.height()).unwrap()
     }
@@ -103,7 +103,7 @@ impl<R: Copy + Num, K: Copy + Mul<R, Output = K>> Mul<R> for &Matrix<K> {
 impl<R: Copy + Num, K: Copy + Mul<R, Output = K>> Mul<R> for Matrix<K> {
     type Output = Matrix<K>;
     fn mul(self, other: R) -> Matrix<K> {
-        let new = self.iter().map(|x| (*x * other)).collect();
+        let new = self.iter().map(|x| *x * other).collect();
 
         Matrix::from_buff(new, self.width(), self.height()).unwrap()
     }

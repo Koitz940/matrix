@@ -1,6 +1,6 @@
 use crate::matrix::Matrix;
 use crate::vector::Vector;
-use std::ops::{AddAssign, MulAssign, SubAssign};
+use std::ops::{AddAssign, DivAssign, MulAssign, SubAssign};
 
 impl<K: AddAssign + Copy> Vector<K> {
     pub fn try_add_assign(&mut self, v: &Vector<K>) -> Result<(), &str> {
@@ -42,6 +42,13 @@ impl<K> Vector<K> {
         K: MulAssign<T>,
     {
         self.get_mut_buff_ref().iter_mut().for_each(|x| *x *= a)
+    }
+
+	pub fn dcl<T: Copy>(&mut self, a: T)
+    where
+        K: DivAssign<T>,
+    {
+        self.get_mut_buff_ref().iter_mut().for_each(|x| *x /= a)
     }
 }
 

@@ -1,4 +1,3 @@
-use core::num;
 use num_traits::{MulAdd, Num};
 use num_traits::{One, Signed, Zero};
 use std::fmt::{Debug, Display, Formatter, Result};
@@ -11,14 +10,14 @@ pub struct Complex<T> {
 }
 
 pub type Comp = Complex<f64>; //default
-pub type C64 = Complex<f64>; //systematic name for default
+/* pub type C64 = Complex<f64>; //systematic name for default
 pub type C32 = Complex<f32>; //f32
 pub type Cg8 = Complex<i8>; //Gaussian Integer i8
 pub type Cg16 = Complex<i16>; //Gaussian Integer i16
 pub type Cg32 = Complex<i32>; //Gaussian Integer i32
 pub type Cg64 = Complex<i64>; //Gaussian integer i64
 pub type Cg128 = Complex<i128>; //Gaussian integer i128
-pub type Cs = Complex<String>; //Complex string, idk why it's funny as all hell, tho well, only adding will work lol
+pub type Cs = Complex<String>; //Complex string, idk why it's funny as all hell, tho well, only adding will work lol */
 
 impl<T: Mul<Output = T> + Add<Output = T> + Copy> Complex<T> {
     pub fn modl(&self) -> T {
@@ -256,11 +255,11 @@ where
     }
 }
 
-impl<T: Copy + PartialOrd + Mul<Output = T> + Add<Output = T>> Complex<T> {
+/* impl<T: Copy + PartialOrd + Mul<Output = T> + Add<Output = T>> Complex<T> {
     fn modl_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         self.modl().partial_cmp(&other.modl())
     }
-}
+} */
 
 pub trait RealMagnitude {
     type Real;

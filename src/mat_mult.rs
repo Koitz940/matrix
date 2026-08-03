@@ -28,9 +28,9 @@ impl<K: Copy + MulAdd<Output = K> + Zero> Matrix<K> {
             for i in 0..self.height() {
                 for j in 0..mat.width() {
                     for k in 0..self.width() {
-                        new[i * self.width() + j] = self
+                        new[i * mat.width() + j] = self
                             .take(i, k)
-                            .mul_add(*mat.take(k, j), new[i * self.width() + j])
+                            .mul_add(*mat.take(k, j), new[i * mat.width() + j])
                     }
                 }
             }
@@ -38,11 +38,11 @@ impl<K: Copy + MulAdd<Output = K> + Zero> Matrix<K> {
         }
     }
 
-	pub fn ref_mul_vec_mat(&self, vec: &Vector<K>) -> Result<Vector<K>, &str> {
-    if vec.dim() != self.height() {
+    pub fn ref_mul_vec_mat(&self, vec: &Vector<K>) -> Result<Vector<K>, &str> {
+        if vec.dim() != self.height() {
             Err("Mismatched matrix and vector Dimensions")
         } else {
-            let mut new = vec![K::zero(); self.height()];
+            let mut new = vec![K::zero(); self.width()];
             for j in 0..self.width() {
                 for i in 0..self.height() {
                     new[i] = self.take(i, j).mul_add(vec[j], new[i]);
@@ -64,78 +64,78 @@ impl<K: Copy + MulAdd<Output = K> + Zero> Matrix<K> {
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<Matrix<K>> for Matrix<K> {
-	type Output = Matrix<K>;
-	fn mul(self, mat: Matrix<K>) -> Self::Output {
-		self.ref_mul_mat(&mat).unwrap()
-	}
+    type Output = Matrix<K>;
+    fn mul(self, mat: Matrix<K>) -> Self::Output {
+        self.ref_mul_mat(&mat).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<Matrix<K>> for &Matrix<K> {
-	type Output = Matrix<K>;
-	fn mul(self, mat: Matrix<K>) -> Self::Output {
-		self.ref_mul_mat(&mat).unwrap()
-	}
+    type Output = Matrix<K>;
+    fn mul(self, mat: Matrix<K>) -> Self::Output {
+        self.ref_mul_mat(&mat).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<&Matrix<K>> for &Matrix<K> {
-	type Output = Matrix<K>;
-	fn mul(self, mat: &Matrix<K>) -> Self::Output {
-		self.ref_mul_mat(mat).unwrap()
-	}
+    type Output = Matrix<K>;
+    fn mul(self, mat: &Matrix<K>) -> Self::Output {
+        self.ref_mul_mat(mat).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<Matrix<K>> for Vector<K> {
-	type Output = Vector<K>;
-	fn mul(self, rhs: Matrix<K>) -> Self::Output {
-		rhs.ref_mul_vec_mat(&self).unwrap()
-	}
+    type Output = Vector<K>;
+    fn mul(self, rhs: Matrix<K>) -> Self::Output {
+        rhs.ref_mul_vec_mat(&self).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<Matrix<K>> for &Vector<K> {
-	type Output = Vector<K>;
-	fn mul(self, rhs: Matrix<K>) -> Self::Output {
-		rhs.ref_mul_vec_mat(self).unwrap()
-	}
+    type Output = Vector<K>;
+    fn mul(self, rhs: Matrix<K>) -> Self::Output {
+        rhs.ref_mul_vec_mat(self).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<&Matrix<K>> for Vector<K> {
-	type Output = Vector<K>;
-	fn mul(self, rhs: &Matrix<K>) -> Self::Output {
-		rhs.ref_mul_vec_mat(&self).unwrap()
-	}
+    type Output = Vector<K>;
+    fn mul(self, rhs: &Matrix<K>) -> Self::Output {
+        rhs.ref_mul_vec_mat(&self).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<&Matrix<K>> for &Vector<K> {
-	type Output = Vector<K>;
-	fn mul(self, rhs: &Matrix<K>) -> Self::Output {
-		rhs.ref_mul_vec_mat(self).unwrap()
-	}
+    type Output = Vector<K>;
+    fn mul(self, rhs: &Matrix<K>) -> Self::Output {
+        rhs.ref_mul_vec_mat(self).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<&Vector<K>> for &Matrix<K> {
-	type Output = Vector<K>;
-	fn mul(self, rhs: &Vector<K>) -> Self::Output {
-		self.ref_mul_vec(rhs).unwrap()
-	}
+    type Output = Vector<K>;
+    fn mul(self, rhs: &Vector<K>) -> Self::Output {
+        self.ref_mul_vec(rhs).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<Vector<K>> for &Matrix<K> {
-	type Output = Vector<K>;
-	fn mul(self, rhs: Vector<K>) -> Self::Output {
-		self.ref_mul_vec(&rhs).unwrap()
-	}
+    type Output = Vector<K>;
+    fn mul(self, rhs: Vector<K>) -> Self::Output {
+        self.ref_mul_vec(&rhs).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<&Vector<K>> for Matrix<K> {
-	type Output = Vector<K>;
-	fn mul(self, rhs: &Vector<K>) -> Self::Output {
-		self.ref_mul_vec(rhs).unwrap()
-	}
+    type Output = Vector<K>;
+    fn mul(self, rhs: &Vector<K>) -> Self::Output {
+        self.ref_mul_vec(rhs).unwrap()
+    }
 }
 
 impl<K: Copy + MulAdd<Output = K> + Zero> Mul<Vector<K>> for Matrix<K> {
-	type Output = Vector<K>;
-	fn mul(self, rhs: Vector<K>) -> Self::Output {
-		self.ref_mul_vec(&rhs).unwrap()
-	}
+    type Output = Vector<K>;
+    fn mul(self, rhs: Vector<K>) -> Self::Output {
+        self.ref_mul_vec(&rhs).unwrap()
+    }
 }

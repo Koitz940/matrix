@@ -190,67 +190,324 @@ pub fn test_cross() {
     // [17.]
     // [-58.]
     // [-16.]
-	let u = Vector::from(vec![Complex {re: 1.0, im: -2.0}, Complex {re: 0.0, im: 10.0}, Complex {re: 3.140, im: -10.}]);
-    let v = Vector::from(vec![Complex {re: -1.0, im: -2.0}, Complex {re: 1.75, im: -2.75}, Complex {re: -1.0, im: 2.5}]);
+    let u = Vector::from(vec![
+        Complex { re: 1.0, im: -2.0 },
+        Complex { re: 0.0, im: 10.0 },
+        Complex {
+            re: 3.140,
+            im: -10.,
+        },
+    ]);
+    let v = Vector::from(vec![
+        Complex { re: -1.0, im: -2.0 },
+        Complex {
+            re: 1.75,
+            im: -2.75,
+        },
+        Complex { re: -1.0, im: 2.5 },
+    ]);
     println!("{}", cross_product(&u, &v));
 }
 
 pub fn mat_mult_tests() {
+    let u = Matrix::from_multiple(vec![vec![1., 0.], vec![0., 1.]]).unwrap();
+    let v = Vector::from(vec![4., 2.]);
+    println!("{}", u.mul_vec(v));
+    // [4.]
+    // [2.]
+    let u = Matrix::from_multiple(vec![vec![2., 0.], vec![0., 2.]]).unwrap();
+    let v = Vector::from(vec![4., 2.]);
+    println!("{}", u.mul_vec(v));
+    // [8.]
+    // [4.]
+    let u = Matrix::from_multiple(vec![vec![2., -2.], vec![-2., 2.]]).unwrap();
+    let v = Vector::from(vec![4., 2.]);
+    println!("{}", u.mul_vec(v));
+    // [4.]
+    // [-4.]
+    let u = Matrix::from_multiple(vec![vec![1., 0.], vec![0., 1.]]).unwrap();
+    let v = Matrix::from_multiple(vec![vec![1., 0.], vec![0., 1.]]).unwrap();
+    println!("{}", u.mul_mat(v));
+    // [1., 0.]
+    // [0., 1.]
+    let u = Matrix::from_multiple(vec![vec![1., 0.], vec![0., 1.]]).unwrap();
+    let v = Matrix::from_multiple(vec![vec![2., 1.], vec![4., 2.]]).unwrap();
+    println!("{}", u.mul_mat(v));
+    // [2., 1.]
+    // [4., 2.]
+    let u = Matrix::from_multiple(vec![vec![3., -5.], vec![6., 8.]]).unwrap();
+    let v = Matrix::from_multiple(vec![vec![2., 1.], vec![4., 2.]]).unwrap();
+    println!("{}", u.mul_mat(v));
+    // [-14., -7.]
+    // [44., 22.]
+    let u = Matrix::from_multiple(vec![
+        vec![Complex { re: 2., im: 1. }, Complex { re: 0., im: 0. }],
+        vec![Complex { re: 0., im: 0. }, Complex { re: 2., im: 1. }],
+    ])
+    .unwrap();
+    let v = Matrix::from_multiple(vec![
+        vec![Complex { re: 2.0, im: -1. }, Complex { re: 3., im: -1. }],
+        vec![Complex { re: 3., im: -1. }, Complex { re: 2.0, im: -1. }],
+    ])
+    .unwrap();
+    println!("{}", u.mul_mat(v));
+    let u = Matrix::from_multiple(vec![vec![3., -5.], vec![6., 8.], vec![1., 2.]]).unwrap();
+    let v = Matrix::from_multiple(vec![vec![2., 1., -4.], vec![4., 2., 2.]]).unwrap();
+    println!("{}", u.mul_mat(v));
+    let u = Matrix::from_multiple(vec![vec![3., -5.], vec![6., 8.], vec![1., 2.]]).unwrap();
+    let v = Matrix::from_multiple(vec![vec![2., 1., -4.], vec![4., 2., 2.]]).unwrap();
+    println!("{}", v * u);
+}
+
+pub fn trace_tests() {
+    let u = Matrix::from_multiple(vec![vec![1., 0.], vec![0., 1.]]).unwrap();
+    println!("{}", u.trace());
+    // 2.0
+    let u = Matrix::from_multiple(vec![vec![2., -5., 0.], vec![4., 3., 7.], vec![-2., 3., 4.]])
+        .unwrap();
+    println!("{}", u.trace());
+    // 9.0
+    let u = Matrix::from_multiple(vec![
+        vec![-2., -8., 4.],
+        vec![1., -23., 4.],
+        vec![0., 6., 4.],
+    ])
+    .unwrap();
+    println!("{}", u.trace());
+    // -21.0
+    let u = Matrix::from_multiple(vec![
+        vec![
+            Complex {
+                re: 3.140,
+                im: -10.,
+            },
+            Complex {
+                re: 3.140,
+                im: -10.,
+            },
+        ],
+        vec![
+            Complex {
+                re: 3.140,
+                im: -10.,
+            },
+            Complex {
+                re: 3.140,
+                im: -10.,
+            },
+        ],
+    ])
+    .unwrap();
+    println!("{}", u.trace());
+}
+
+pub fn transpose_test() {
+    let u = Matrix::from_multiple(vec![
+        vec![
+            Complex { re: 1., im: -1. },
+            Complex {
+                re: 3.140,
+                im: -10.,
+            },
+        ],
+        vec![
+            Complex { re: 0.0, im: -10.5 },
+            Complex {
+                re: 3.250,
+                im: -10.25,
+            },
+        ],
+    ])
+    .unwrap();
+    println!("{}", u.transpose());
+    println!("{}", u.dagger());
+    let u = Matrix::from_multiple(vec![vec![3., -5.], vec![6., 8.], vec![1., 2.]]).unwrap();
+    println!("{}", u.transpose());
+}
+
+pub fn row_echelon_test() {
+    let u =
+        Matrix::from_multiple(vec![vec![1., 0., 0.], vec![0., 1., 0.], vec![0., 0., 1.]]).unwrap();
+    println!("{}", u.stand_row_echelon());
+    println!("{}\n", u.row_echelon());
+    // [1.0, 0.0, 0.0]
+    // [0.0, 1.0, 0.0]
+    // [0.0, 0.0, 1.0]
+    let u = Matrix::from_multiple(vec![vec![1., 2.], vec![3., 4.]]).unwrap();
+    println!("{}", u.stand_row_echelon());
+    println!("{}\n", u.row_echelon());
+    // [1.0, 0.0]
+    // [0.0, 1.0]
+    let u = Matrix::from_multiple(vec![vec![1., 2.], vec![2., 4.]]).unwrap();
+    println!("{}", u.stand_row_echelon());
+    println!("{}\n", u.row_echelon());
+    // [1.0, 2.0]
+    // [0.0, 0.0]
+    let u = Matrix::from_multiple(vec![
+        vec![8., 5., -2., 4., 28.],
+        vec![4., 2.5, 20., 4., -4.],
+        vec![8., 5., 1., 4., 17.],
+    ])
+    .unwrap();
+    println!("{}", u.stand_row_echelon());
+    println!("{}\n", u.row_echelon());
+    println!("{}", u.transpose().stand_row_echelon());
+    println!("{}\n", u.transpose().row_echelon());
+    // [1.0, 0.625, 0.0, 0.0, -12.1666667]
+    // [0.0, 0.0, 1.0, 0.0, -3.6666667]
+    // [0.0, 0.0, 0.0, 1.0, 29.5 ]
+    let u = Matrix::from_multiple(vec![
+        vec![
+            Complex { re: 1., im: -1. },
+            Complex {
+                re: 3.140,
+                im: -10.,
+            },
+        ],
+        vec![
+            Complex { re: 0.0, im: -10.5 },
+            Complex {
+                re: 3.250,
+                im: -10.25,
+            },
+        ],
+    ])
+    .unwrap();
+    println!("{}", u.stand_row_echelon());
+    println!("{}\n", u.row_echelon());
+}
+
+pub fn determinant_test() {
+    let u = Matrix::from_multiple(vec![vec![1., -1.], vec![-1., 1.]]).unwrap();
+    println!("{}", u.determinant());
+    // 0.0
+    let u =
+        Matrix::from_multiple(vec![vec![2., 0., 0.], vec![0., 2., 0.], vec![0., 0., 2.]]).unwrap();
+    println!("{}", u.determinant());
+    // 8.0
+    let u = Matrix::from_multiple(vec![vec![8., 5., -2.], vec![4., 7., 20.], vec![7., 6., 1.]])
+        .unwrap();
+    println!("{}", u.determinant());
+    // -174.0
+    let u = Matrix::from_multiple(vec![
+        vec![8., 5., -2., 4.],
+        vec![4., 2.5, 20., 4.],
+        vec![8., 5., 1., 4.],
+        vec![28., -4., 17., 1.],
+    ])
+    .unwrap();
+    println!("{}", u.determinant());
+    // 1032
+    let u = Matrix::from_multiple(vec![
+        vec![
+            Complex { re: 1., im: -1. },
+            Complex {
+                re: 3.140,
+                im: -10.,
+            },
+        ],
+        vec![
+            Complex { re: 0.0, im: -10.5 },
+            Complex {
+                re: 3.250,
+                im: -10.25,
+            },
+        ],
+    ])
+    .unwrap();
+    println!("{}", u.determinant());
+}
+
+pub fn inverse_test() {
+    let u =
+        Matrix::from_multiple(vec![vec![1., 0., 0.], vec![0., 1., 0.], vec![0., 0., 1.]]).unwrap();
+    let v = u.inverse().unwrap();
+    println!("{}", u.inverse().unwrap());
+    println!("{}", &u * &v);
+    println!("{}\n", &v * &u);
+    // [1.0, 0.0, 0.0]
+    // [0.0, 1.0, 0.0]
+    // [0.0, 0.0, 1.0]
+    let u =
+        Matrix::from_multiple(vec![vec![2., 0., 0.], vec![0., 2., 0.], vec![0., 0., 2.]]).unwrap();
+    let v = u.inverse().unwrap();
+    println!("{}", u.inverse().unwrap());
+    println!("{}", &u * &v);
+    println!("{}", &v * &u);
+    // [0.5, 0.0, 0.0]
+    // [0.0, 0.5, 0.0]
+    // [0.0, 0.0, 0.5]
+    let u = Matrix::from_multiple(vec![vec![8., 5., -2.], vec![4., 7., 20.], vec![7., 6., 1.]])
+        .unwrap();
+    let v = u.inverse().unwrap();
+    println!("{}", u.inverse().unwrap());
+    println!("{}", &u * &v);
+    println!("{}\n", &v * &u);
+    // [0.649425287, 0.097701149, -0.655172414]
+    // [-0.781609195, -0.126436782, 0.965517241]
+    // [0.143678161, 0.074712644, -0.206896552]
+    let u = Matrix::from_multiple(vec![
+        vec![
+            Complex { re: 1., im: -1. },
+            Complex {
+                re: 3.140,
+                im: -10.,
+            },
+        ],
+        vec![
+            Complex { re: 0.0, im: -10.5 },
+            Complex {
+                re: 3.250,
+                im: -10.25,
+            },
+        ],
+    ])
+    .unwrap();
+    let v = u.inverse().unwrap();
+    println!("{}", u.inverse().unwrap());
+    println!("{}", &u * &v);
+    println!("{}\n", &v * &u);
+}
+
+pub fn rank_test() {
 	let u = Matrix::from_multiple(vec![
-	vec![1., 0.],
-	vec![0., 1.],
+	vec![1., 0., 0.],
+	vec![0., 1., 0.],
+	vec![0., 0., 1.],
 	]).unwrap();
-	let v = Vector::from(vec![4., 2.]);
-	println!("{}", u.mul_vec(v));
-	// [4.]
-	// [2.]
+	println!("{}", u.rank());
+	// 3
 	let u = Matrix::from_multiple(vec![
-	vec![2., 0.],
-	vec![0., 2.],
+	vec![ 1., 2., 0., 0.],
+	vec![ 2., 4., 0., 0.],
+	vec![-1., 2., 1., 1.],
 	]).unwrap();
-	let v = Vector::from(vec![4., 2.]);
-	println!("{}", u.mul_vec(v));
-	// [8.]
-	// [4.]
+	println!("{}", u.rank());
+	// 2
 	let u = Matrix::from_multiple(vec![
-	vec![2., -2.],
-	vec![-2., 2.],
+	vec![ 8., 5., -2.],
+	vec![ 4., 7., 20.],
+	vec![ 7., 6., 1.],
+	vec![21., 18., 7.],
 	]).unwrap();
-	let v = Vector::from(vec![4., 2.]);
-	println!("{}", u.mul_vec(v));
-	// [4.]
-	// [-4.]
+	println!("{}", u.rank());
+	// 3
 	let u = Matrix::from_multiple(vec![
-	vec![1., 0.],
-	vec![0., 1.],
-	]).unwrap();
-	let v = Matrix::from_multiple(vec![
-	vec![1., 0.],
-	vec![0., 1.],
-	]).unwrap();
-	println!("{}", u.mul_mat(v));
-	// [1., 0.]
-	// [0., 1.]
-	let u = Matrix::from_multiple(vec![
-	vec![1., 0.],
-	vec![0., 1.],
-	]).unwrap();
-	let v = Matrix::from_multiple(vec![
-	vec![2., 1.],
-	vec![4., 2.],
-	]).unwrap();
-	println!("{}", u.mul_mat(v));
-	// [2., 1.]
-	// [4., 2.]
-	let u = Matrix::from_multiple(vec![
-	vec![3., -5.],
-	vec![6., 8.],
-	]).unwrap();
-	let v = Matrix::from_multiple(vec![
-	vec![2., 1.],
-	vec![4., 2.],
-	]).unwrap();
-	println!("{}", u.mul_mat(v));
-// [-14., -7.]
-// [44., 22.]
+        vec![
+            Complex { re: 1., im: -1. },
+            Complex {
+                re: 3.140,
+                im: -10.,
+            },
+        ],
+        vec![
+            Complex { re: 0.0, im: -10.5 },
+            Complex {
+                re: 3.250,
+                im: -10.25,
+            },
+        ],
+    ])
+    .unwrap();
+	println!("{}", u.rank());
 }

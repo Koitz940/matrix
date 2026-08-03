@@ -3,7 +3,7 @@ use num_traits::{Float, MulAdd, Signed, Zero};
 use crate::complex::{Complex, RealMagnitude};
 use crate::vector::Vector;
 
-pub fn cool_angle_cos<K: MulAdd<K, K, Output = K> + Copy + Zero + Float + Signed>(
+/* pub fn cool_angle_cos<K: MulAdd<K, K, Output = K> + Copy + Zero + Float + Signed>(
     u: &Vector<K>,
     v: &Vector<K>,
 ) -> K {
@@ -22,7 +22,7 @@ pub fn cool_comp_angle_abs_cos<K: MulAdd<K, K, Output = K> + Copy + Zero + Float
     v: &Vector<Complex<K>>,
 ) -> K {
     Vector::dot_conj(u, v).modl().sqrt() / (u.cool_norm() * v.cool_norm())
-}
+} */
 
 pub fn angle_cos<K: MulAdd<K, K, Output = K> + Copy + Zero + Float + Signed + RealMagnitude<Real = f32>>(
     u: &Vector<K>,
@@ -45,7 +45,7 @@ pub fn cf32_angle_abs_cos(
     Vector::dot_conj(u, v).abs_val() / (u.cool_norm() * v.cool_norm())
 }
 
-pub fn cf64_angle_re_cos<>(
+/* pub fn cf64_angle_re_cos<>(
     u: &Vector<Complex<f32>>,
     v: &Vector<Complex<f32>>,
 ) -> f32 {
@@ -58,3 +58,4 @@ pub fn cf64_angle_abs_cos(
 ) -> f64 {
     Vector::dot_conj(u, v).abs_val() / (u.cool_norm() * v.cool_norm())
 }
+ */

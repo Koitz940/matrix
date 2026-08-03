@@ -115,6 +115,16 @@ impl<K> Matrix<K> {
     }
 }
 
+impl<K: Copy> Matrix<K> {
+    pub fn copy(&self) -> Matrix<K> {
+        Matrix {
+            buff: self.buff.iter().map(|x| *x).collect(),
+            w: self.w,
+            h: self.h,
+        }
+    }
+}
+
 impl<K> Index<usize> for Matrix<K> {
     type Output = [K];
 
@@ -131,12 +141,12 @@ impl<K> IndexMut<usize> for Matrix<K> {
 
 impl<K> Matrix<K> {
     pub fn take(&self, i: usize, j: usize) -> &K {
-        assert!(i < self.height() && i >= 0 && j < self.width() && j >= 0);
+        assert!(i < self.height() && j < self.width());
         &self.buff[i * self.width() + j]
     }
 
     pub fn mut_take(&mut self, i: usize, j: usize) -> &mut K {
-        assert!(i < self.height() && i >= 0 && j < self.width() && j >= 0);
+        assert!(i < self.height() && j < self.width());
         &mut self.buff[i * self.w + j]
     }
 }
@@ -175,13 +185,15 @@ impl<K: Display> Display for Matrix<K> {
 impl<K: Clone> Matrix<K> {
     pub fn rows(&self) -> Vec<Vector<K>> {
         (0..self.height())
-            .map(|i| Vector::from(self.buff[i * self.width()..(i + 1) * self.width()].to_vec())).collect()
+            .map(|i| Vector::from(self.buff[i * self.width()..(i + 1) * self.width()].to_vec()))
+            .collect()
     }
 }
 
 impl<K: Clone> Matrix<K> {
     pub fn mut_rows(&self) -> Vec<Vector<K>> {
         (0..self.height())
-            .map(|i| Vector::from(self.buff[i * self.width()..(i + 1) * self.width()].to_vec())).collect()
+            .map(|i| Vector::from(self.buff[i * self.width()..(i + 1) * self.width()].to_vec()))
+            .collect()
     }
 }

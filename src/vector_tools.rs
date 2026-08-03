@@ -1,7 +1,7 @@
-use num_traits::{Num};
+use num_traits::Num;
 
 use crate::vector::Vector;
-use std::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 impl<K: Copy + Add<Output = K>> Vector<K> {
     pub fn try_sum(&self, other: &Vector<K>) -> Result<Vector<K>, &str> {
@@ -92,7 +92,7 @@ impl<K: Copy + Sub<Output = K>> Sub<Vector<K>> for Vector<K> {
 impl<R: Copy + Num, K: Copy + Mul<R, Output = K>> Mul<R> for &Vector<K> {
     type Output = Vector<K>;
     fn mul(self, other: R) -> Vector<K> {
-        let new = self.iter().map(|x| (*x * other)).collect();
+        let new = self.iter().map(|x| *x * other).collect();
 
         Vector::from(new)
     }
@@ -101,7 +101,25 @@ impl<R: Copy + Num, K: Copy + Mul<R, Output = K>> Mul<R> for &Vector<K> {
 impl<R: Copy + Num, K: Copy + Mul<R, Output = K>> Mul<R> for Vector<K> {
     type Output = Vector<K>;
     fn mul(self, other: R) -> Vector<K> {
-        let new = self.iter().map(|x| (*x * other)).collect();
+        let new = self.iter().map(|x| *x * other).collect();
+
+        Vector::from(new)
+    }
+}
+
+impl<R: Copy + Num, K: Copy + Div<R, Output = K>> Div<R> for &Vector<K> {
+    type Output = Vector<K>;
+    fn div(self, other: R) -> Vector<K> {
+        let new = self.iter().map(|x| *x / other).collect();
+
+        Vector::from(new)
+    }
+}
+
+impl<R: Copy + Num, K: Copy + Div<R, Output = K>> Div<R> for Vector<K> {
+    type Output = Vector<K>;
+    fn div(self, other: R) -> Vector<K> {
+        let new = self.iter().map(|x| *x / other).collect();
 
         Vector::from(new)
     }
@@ -122,6 +140,12 @@ impl<K: Copy + AddAssign> AddAssign for Vector<K> {
 impl<K: Copy + MulAssign> MulAssign<K> for Vector<K> {
     fn mul_assign(&mut self, other: K) {
         Vector::scl(self, other);
+    }
+}
+
+impl<K: Copy + DivAssign> DivAssign<K> for Vector<K> {
+    fn div_assign(&mut self, other: K) {
+        Vector::dcl(self, other);
     }
 }
 
